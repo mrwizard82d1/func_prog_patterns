@@ -1,8 +1,6 @@
 package com.cjl_magistri.tinyweb.example;
 
-import com.cjl_magistri.tinyweb.Controller;
-import com.cjl_magistri.tinyweb.Filter;
-import com.cjl_magistri.tinyweb.TinyWeb;
+import com.cjl_magistri.tinyweb.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,6 +13,16 @@ public class TestHarness {
         System.out.println("Hello, Java Test Harness.");
 
         TinyWeb framework = new TinyWeb(makeRoutes(), makeFilters());
+
+        HttpRequest request = HttpRequest.Builder.newBuilder()
+                .path("greeting")
+                .body("Mike,Joe,John,Steve")
+                .addHeader("X-Example", "exampleHeader")
+                .build();
+
+        HttpResponse response = framework.handleRequest(request);
+        System.out.println(response.getResponseCode());
+        System.out.println(response.getBody());
     }
 
     private static Map<String, Controller> makeRoutes() {
