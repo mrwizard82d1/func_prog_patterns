@@ -58,5 +58,25 @@ public class HttpRequest {
         public static Builder newBuilder() {
             return new Builder();
         }
+
+        /**
+         * Create a Builder from an existing HttpRequest
+         *
+         * This method is used to support filters that "change" an immutable HttpRequest.
+         * @param request The original, unmodified request
+         * @return The "modified" request.
+         */
+        public static Builder builderFrom(HttpRequest request) {
+            Builder builder = new Builder();
+            builder.path(request.getPath());
+            builder.body(request.getBody());
+
+            Map<String, String> headers = request.getHeaders();
+            for(String headerName: headers.keySet()) {
+                builder.addHeader(headerName, headers.get(headerName));
+            }
+
+            return builder;
+        }
     }
 }
