@@ -2,20 +2,15 @@ package com.cjl_magistri.tinyweb.example;
 
 import com.cjl_magistri.tinyweb.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TestHarness {
 
     public static void main(String[] args) {
-        System.out.println("Hello, Java Test Harness.");
-
         TinyWeb framework = new TinyWeb(makeRoutes(), makeFilters());
 
         HttpRequest request = HttpRequest.Builder.newBuilder()
-                .path("greeting")
+                .path("greeting/")
                 .body("Mike,Joe,John,Steve")
                 .addHeader("X-Example", "exampleHeader")
                 .build();
@@ -30,10 +25,18 @@ public class TestHarness {
     }
 
     private static Map<String, Controller> makeRoutes() {
-        return new HashMap<String, Controller>();
+        GreetingRenderingStrategy viewRenderer = new GreetingRenderingStrategy();
+        StrategyView greetingView = new StrategyView(viewRenderer);
+        GreetingController greetingController = new GreetingController(greetingView);
+
+        Map<String, Controller> routeMap = new HashMap<String, Controller>();
+        routeMap.put("greeting/", greetingController);
+        return Collections.unmodifiableMap(routeMap);
     }
 
     private static List<Filter> makeFilters() {
-        return new ArrayList<Filter>();
+        List<Filter> filters = new ArrayList<Filter>();
+        filters.add(new LoggingFilter());
+        return filters;
     }
 }
