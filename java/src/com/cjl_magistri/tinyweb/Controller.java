@@ -1,4 +1,5 @@
 package com.cjl_magistri.tinyweb;
 
-public class Controller {
+public interface Controller {
+    HttpResponse handleRequest(HttpRequest httpRequest);
 }
