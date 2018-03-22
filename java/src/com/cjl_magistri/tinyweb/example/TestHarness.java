@@ -21,8 +21,12 @@ public class TestHarness {
                 .build();
 
         HttpResponse response = framework.handleRequest(request);
-        System.out.println(response.getResponseCode());
-        System.out.println(response.getBody());
+        if (response != null) {
+            System.out.println(response.getResponseCode());
+            System.out.println(response.getBody());
+        } else {
+            System.out.println("A null. Something is missing in the state of Denmark!");
+        }
     }
 
     private static Map<String, Controller> makeRoutes() {
