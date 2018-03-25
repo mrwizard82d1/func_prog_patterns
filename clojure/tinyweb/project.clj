@@ -6,6 +6,6 @@
   :dependencies [[org.clojure/clojure "1.9.0"]]
   :main ^:skip-aot tinyweb.core
   :target-path "target/%s"
-  :source-paths "src/clj"
-  :java-source-path "src/java"
+  :source-paths ["src/clj"]
+  :java-source-paths ["src/java"]
   :profiles {:uberjar {:aot :all}})
