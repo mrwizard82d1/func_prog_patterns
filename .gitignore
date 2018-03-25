@@ -48,7 +48,7 @@ pom.xml
 pom.xml.asc
 *.jar
 *.class
-/.lein-*
+.lein-*
 /.nrepl-port
 .hgignore
 .hg/
