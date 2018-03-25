@@ -1,4 +1,5 @@
 (ns tinyweb.core
+  (:require [clojure.string :as str])
   (:gen-class)
   (:import (com.cjl_magistri.tinyweb RenderingException ControllerException)))
 
@@ -37,23 +38,20 @@
           handler (request-handlers path)]
       (execute-request filtered-request handler))))
 
-(defn- test-controller [http-request]
-  {:name (http-request :body)})
+(defn- make-greeting [name]
+  (let [greetings ["Hello" "Greetings" "Salutations" "Hola"]
+        greeting-count (count greetings)]
+    (str (greetings (rand-int greeting-count)) ", " name)))
 
-(defn- test-view [model]
-  (str "<h1>Hello, ", (model :name) "</h1>"))
-
-(def test-request-handler {:controller test-controller
-                           :view test-view})
-
-(def test-http-request {:body "Mike"
-                        :path "/say-hello"
-                        :headers {}})
+(defn- handle-greeting [http-request]
+  {:greetings (map make-greeting (str/split (:body http-request) #","))})
 
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
   (println "Hello, World!")
-  (println (str "(execute-request test-http-request test-request-handler): "
-                (execute-request test-http-request test-request-handler))))
+  (let [request {:path "/greeting"
+                 :body "Mike,Joe,John,Steve"}]
+    (println (str "(handle-greeting request): " (handle-greeting request)))))
+
 
