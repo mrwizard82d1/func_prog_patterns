@@ -25,26 +25,17 @@ trait Controller {
   *                  concrete implementation of PrimitiveOperation.
   */
 class FunctionController(view: View, doRequest: (HttpRequest) => Map[String, List[String]]) extends Controller {
-  def handleRequest(request: HttpRequest): HttpResponse = {
-    var responseCode = 200;
-    var responseBody = "";
-
+  def handleRequest(request: HttpRequest): HttpResponse =
     try {
       val model = doRequest(request)
-      responseBody = view.render(model)
+      val responseBody = view.render(model)
+      HttpResponse(responseBody, 200)
     } catch {
-      case cr: ControllerException =>
-        responseCode = cr.getStatusCode()
-      case re: RenderingException =>
-        responseCode = 500
-        responseBody = "Exception while rendering."
-      case ex: Exception =>
-        responseCode = 500
+      case e: ControllerException =>
+        HttpResponse("", e.getStatusCode)
+      case e: RenderingException =>
+        HttpResponse("Exception while rendering", 500)
+      case e: Exception =>
+        HttpResponse("", 500)
     }
-
-    HttpResponse.Builder.newBuilder()
-      .body(responseBody)
-      .responseCode(responseCode)
-      .build()
-  }
 }
