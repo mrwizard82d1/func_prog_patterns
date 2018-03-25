@@ -53,6 +53,9 @@
   (let [rendered-greetings (str/join "\n " (map render-greeting (:greetings model)))]
     (str "<h1>Friendly Greetings</h1>\n " rendered-greetings)))
 
+(defn- logging-filter [http-request]
+  (println (str "In logging-filter(" (:path http-request) ")")))
+
 (defn -main
   "I don't do a whole lot ... yet."
   [& args]
@@ -60,5 +63,7 @@
   (let [request {:path "/greeting"
                  :body "Mike,Joe,John,Steve"}]
     (println (str "(handle-greeting request): " (handle-greeting request)))
-    (println (str "(greeting-view (handle-greeting request): " (greeting-view (handle-greeting request))))))
+    (println (str "(greeting-view (handle-greeting request): " (greeting-view (handle-greeting request))))
+    (println (str "(logging-filter request) - side effect"))
+    (logging-filter request)))
 
